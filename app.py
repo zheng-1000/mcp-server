@@ -2,7 +2,7 @@ from fastmcp import FastMCP
 from keyss import api_key
 
 client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
+    base_url="https://203.64.104.13:8000/v1",
     api_key=api_key,
 )
 
@@ -17,7 +17,6 @@ def add(n1:int , n2:int) -> int:
 def ask_solar(prompt: str) -> str:
     """
     調用 Upstage Solar-Pro-3 模型進行 AI 問答。
-    適合處理邏輯分析、創意寫作或一般諮詢。
     """
     try:
         completion = client.chat.completions.create(
