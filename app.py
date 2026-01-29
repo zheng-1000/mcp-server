@@ -1,32 +1,37 @@
+import os
 from fastmcp import FastMCP
-# from __pycache__.keyss import api_key
-from langchain_openai import ChatOpenAI
+from openai import OpenAI
+from dotenv import load_dotenv  # 匯入 dotenv
 
-client = ChatOpenAI(
-    base_url="https://203.64.104.13:8000/v1",
-    # api_key=api_key,
+# 自動尋找並讀取 .env 檔案
+load_dotenv()
+
+# 1. 初始化 MCP Server
+app = FastMCP("Solar-Pro Server")
+
+# 2. 從環境變數中讀取 API Key
+# 如果讀不到，這會回傳 None，避免程式寫死導致的安全風險
+api_key = os.getenv("OPENROUTER_API_KEY")
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key,
 )
-
-app = FastMCP("My MCP Server")
-
-@app.tool
-def add(n1:int , n2:int) -> int:
-    """ADD Two numbers"""
-    return n1 + n2
 
 @app.tool()
 def ask_solar(prompt: str) -> str:
-    """
-    調用 Upstage Solar-Pro-3 模型進行 AI 問答。
-    """
+    """當使用者問問題時，調用 Upstage Solar-Pro-3:free 模型，並回覆給使用者"""
+    if not api_key:
+        return "錯誤：找不到 API Key，請檢查 .env 檔案。"
+        
     try:
         completion = client.chat.completions.create(
-            model="Seed-OSS-36B",
-            messages=[
-                {"role": "system", "content": "你是一個有幫助的助理，請以繁體中文回答。"},
-                {"role": "user", "content": prompt}
-            ]
+            model="upstage/solar-pro-3:free",
+            messages=[{"role": "user", "content": prompt}]
         )
         return completion.choices[0].message.content
     except Exception as e:
-        return f"連線至 OpenRouter 時發生錯誤: {str(e)}"
+        return f"連線錯誤: {str(e)}"
+
+if __name__ == "__main__":
+    app.run()
