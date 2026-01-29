@@ -1,7 +1,8 @@
 from fastmcp import FastMCP
 from keyss import api_key
+from langchain_openai import ChatOpenAI
 
-client = OpenAI(
+client = ChatOpenAI(
     base_url="https://203.64.104.13:8000/v1",
     api_key=api_key,
 )
@@ -20,7 +21,7 @@ def ask_solar(prompt: str) -> str:
     """
     try:
         completion = client.chat.completions.create(
-            model="upstage/solar-pro-3:free",
+            model="Seed-OSS-36B",
             messages=[
                 {"role": "system", "content": "你是一個有幫助的助理，請以繁體中文回答。"},
                 {"role": "user", "content": prompt}
