@@ -1,1 +1,0 @@
-api_key ="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"
