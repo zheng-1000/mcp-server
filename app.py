@@ -1,10 +1,10 @@
 from fastmcp import FastMCP
-from __pycache__.keyss import api_key
+# from __pycache__.keyss import api_key
 from langchain_openai import ChatOpenAI
 
 client = ChatOpenAI(
     base_url="https://203.64.104.13:8000/v1",
-    api_key=api_key,
+    # api_key=api_key,
 )
 
 app = FastMCP("My MCP Server")
