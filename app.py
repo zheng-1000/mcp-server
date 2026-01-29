@@ -32,6 +32,3 @@ def ask_solar(prompt: str) -> str:
         return completion.choices[0].message.content
     except Exception as e:
         return f"連線錯誤: {str(e)}"
-
-if __name__ == "__main__":
-    app.run()
